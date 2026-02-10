@@ -4,11 +4,15 @@
 class Plant:
     """Blueprint for a plant with a name, height, and age."""
 
+    plans_number = 0
+
     def __init__(self, name: str, height: int, age: int) -> None:
-        """Construct a new plant with the given name, height, and age."""
+        """Initialize a new plant with the given name, height, and age."""
         self.name = name
         self.height = height
         self.age = age
+        Plant.plans_number += 1
+        print(f"Created plant: {self.get_info()}")
 
     def grow(self, cm: int = 1):
         """Add centimeters to the plant's height."""
@@ -24,16 +28,13 @@ class Plant:
 
     def get_info(self) -> str:
         """Get the plant's information as a string."""
-        return f"{self.name}: {self.height}cm, {self.age} days old"
+        return f"{self.name} ({self.height}cm, {self.age} days)"
 
 
 if __name__ == "__main__":
-    p1 = Plant("Rose", 30, 15)
-    prev_height = p1.height
-    print("== Day 1 ==")
-    p1.show()
-    p1.grow(5)
-    p1.grow_older(5)
-    print("== Day 7 ==")
-    p1.show()
-    print(f"Growth this week: +{p1.height - prev_height}")
+    p1 = Plant("Rose", 30, 25)
+    p2 = Plant("Oak", 200, 365)
+    p2 = Plant("Cactus", 5, 90)
+    p3 = Plant("Sunflower", 80, 45)
+    p4 = Plant("Fern", 15, 120)
+    print(f"Total plants created: {Plant.plans_number}")
