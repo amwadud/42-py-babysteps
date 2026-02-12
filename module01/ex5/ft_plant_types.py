@@ -44,7 +44,9 @@ class Plant:
 
 
 class Flower(Plant):
-    pass
+    def __init__(self, name: str, height: int, age: int) -> None:
+        super().__init__(name, height, age)
+        print(f"Created flower: {self.get_info()}")
 
 
 class Tree(Plant):
