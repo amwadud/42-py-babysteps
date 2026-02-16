@@ -5,7 +5,6 @@ class Plant:
     """
     Blueprint for a plant with a name, height, and age.
     """
-    plans_number = 0
 
     def __init__(self, name: str, height: int, age: int) -> None:
         """
@@ -14,7 +13,6 @@ class Plant:
         self.name = name
         self.height = height
         self.age = age
-        Plant.plans_number += 1
 
 
 class Flower(Plant):
@@ -31,7 +29,7 @@ class Flower(Plant):
         """
         Simulate the blooming of the flower.
         """
-        print(f"{self.name} is blooming with {self.color} petals!")
+        print(f"{self.name} is blooming beautifuly!")
 
 
 class Tree(Plant):
@@ -45,8 +43,7 @@ class Tree(Plant):
         """
         Simulate the tree providing shade.
         """
-        print(f"{self.name} is providing shade "
-              f"with its {self.height}cm height!")
+        print("Oak provides {self.trunk_diameter} square meters of shade")
 
 
 class Vegetable(Plant):
@@ -60,9 +57,4 @@ class Vegetable(Plant):
 
 
 if __name__ == "__main__":
-    p1 = Plant("Rose", 30, 25)
-    p2 = Plant("Oak", 200, 365)
-    p2 = Plant("Cactus", 5, 90)
-    p3 = Plant("Sunflower", 80, 45)
-    p4 = Plant("Fern", 15, 120)
-    print(f"Total plants created: {Plant.plans_number}")
+    print("=== Garden Plant Types ===")
