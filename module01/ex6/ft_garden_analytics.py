@@ -30,7 +30,7 @@ class GardenManager:
     def create_garden_network(self) -> None:
         pass
 
-    def add(slef) -> None:
+    def add(self) -> None:
         pass
 
     def report(self) -> None:
