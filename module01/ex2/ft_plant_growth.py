@@ -1,51 +1,46 @@
 #!/usr/bin/env python3
+"""Module for simulating plant growth and aging."""
 
 
 class Plant:
-    """
-    Blueprint for a plant with a name, height, and age.
-    """
+    """Blueprint for a plant with a name, height, and age."""
 
-    def __init__(self, name: str, height: int, age: int) -> None:
-        """
-        Construct a new plant with the given name, height, and age.
-        """
+    def __init__(self, name: str, height: int, longevity: int) -> None:
+        """Construct a new plant with attributes."""
         self.name = name
         self.height = height
-        self.age = age
+        self.longevity = longevity
 
-    def grow(self, cm: int = 1):
-        """
-        Add centimeters to the plant's height.
-        """
+    def grow(self, cm: int = 1) -> None:
+        """Add centimeters to the plant's height."""
         self.height += cm
 
-    def grow_older(self, days: int = 1):
-        """
-        Add days to the plant's age.
-        """
-        self.age += days
-
-    def show(self):
-        """
-        Print the plant's information to the console.
-        """
-        print(f"{self.name}: {self.height}cm, {self.age} days old")
+    def age(self, days: int = 1) -> None:
+        """Add days to the plant's age."""
+        self.longevity += days
 
     def get_info(self) -> str:
-        """
-        Get the plant's information as a string.
-        """
-        return f"{self.name}: {self.height}cm, {self.age} days old"
+        """Return the plant's current status as a string."""
+        return f"{self.name}: {self.height}cm, {self.longevity} days old"
 
 
 if __name__ == "__main__":
-    p1 = Plant("Rose", 30, 15)
-    prev_height = p1.height
-    print("== Day 1 ==")
-    p1.show()
-    p1.grow(5)
-    p1.grow_older(5)
-    print("== Day 7 ==")
-    p1.show()
-    print(f"Growth this week: +{p1.height - prev_height}")
+    rose = Plant("Rose", 25, 30)
+    cactus = Plant("Cactus", 15, 120)
+
+    rose_start_h = rose.height
+
+    print("=== Day 1 ===")
+    print(rose.get_info())
+    print(cactus.get_info())
+
+    rose.grow(6)
+    rose.age(6)
+
+    cactus.grow()
+    cactus.age(6)
+
+    print("=== Day 7 ===")
+    print(rose.get_info())
+    print(cactus.get_info())
+    print(f"Growth this week: +{rose.height - rose_start_h}cm")

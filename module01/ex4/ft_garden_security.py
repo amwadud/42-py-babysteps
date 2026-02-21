@@ -1,75 +1,67 @@
-#!/bin/usr/env python3
+#!/usr/bin/env python3
+"""Module for the Garden Security System: Exercise 4."""
 
 
 class SecurePlant:
     """
     Secure version of the Plant class with private attributes and validation.
+    Demonstrates the concept of Encapsulation.
     """
 
     def __init__(self, name: str, height: int, age: int) -> None:
         """
-        Construct a new plant with the given name, height, and age.
+        Construct a new plant.
+        Calls setters to ensure data integrity during initialization.
         """
         self.__name = name
-        self.__height = height
-        self.__age = age
+        self.__height = 0
+        self.__age = 0
+
         print(f"Plant created: {self.__name}")
-
-    def show(self):
-        """
-        Print the plant's information to the console.
-        """
-        print(f"{self.__name}: {self.__height}cm, {self.__age} days old")
-
-    def get_info(self) -> str:
-        """
-        Get the plant's information as a string.
-        """
-        return f"{self.__name}: {self.__height}cm, {self.__age} days old"
-
-    def set_height(self, height: int):
-        """
-        Set the plant's height with validation to prevent negative values.
-        """
-        if height < 0:
-            print(
-                f"Invalid operation attempted: height {height}cm [REJECTED]\n"
-                "Security: Negative height rejected\n\n"
-                f"Current plant: {self.__name} "
-                f"({self.__height}cm, {self.__age} days) "
-            )
-            return
-        self.__height = height
-        print(f"Height updated: {height}cm [OK]")
-
-    def set_age(self, age: int):
-        """
-        Set the plant's age with validation to prevent negative values.
-        """
-        if age < 0:
-            print("Age cannot be negative.")
-            return
-        self.__age = age
-        print(f"Age updated: {age} days [OK]")
-
-    def get_age(self) -> int:
-        """
-        Get the plant's age.
-        """
-        return self.__age
+        self.set_height(height)
+        self.set_age(age)
 
     def get_height(self) -> int:
-        """
-        Get the plant's height.
-        """
+        """Return the encapsulated height."""
         return self.__height
+
+    def get_age(self) -> int:
+        """Return the encapsulated age."""
+        return self.__age
+
+    def set_height(self, value: int) -> None:
+        """
+        Set the plant's height with validation.
+        Rejects negative values to maintain data integrity.
+        """
+        if value < 0:
+            print(f"Invalid operation attempted: height {value}cm [REJECTED]")
+            print("Security: Negative height rejected")
+        else:
+            self.__height = value
+            print(f"Height updated: {value}cm [OK]")
+
+    def set_age(self, value: int) -> None:
+        """
+        Set the plant's age with validation.
+        Rejects negative values to maintain data integrity.
+        """
+        if value < 0:
+            print(f"Invalid operation attempted: age {value} days [REJECTED]")
+            print("Security: Negative age rejected")
+        else:
+            self.__age = value
+            print(f"Age updated: {value} days [OK]")
+
+    def get_info(self) -> str:
+        """Return the official status string for the plant."""
+        return f"{self.__name} ({self.__height}cm, {self.__age} days)"
 
 
 if __name__ == "__main__":
-    print("=== Garden Security System === ")
-    p1 = SecurePlant("Rose", 30, 15)
-    p1.show()
-    p1.set_height(35)
-    p1.set_age(20)
-    p1.show()
-    p1.set_height(-5)  # Attempt to set invalid height
+    print("=== Garden Security System ===")
+    p1 = SecurePlant("Rose", 25, 30)
+    print()
+    p1.set_height(-5)
+    print()
+    print("Current plant:", p1.get_info())
