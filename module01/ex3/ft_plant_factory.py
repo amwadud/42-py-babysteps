@@ -8,14 +8,14 @@ class Plant:
     Tracks total instances created using a class attribute.
     """
 
-    total_count: int
+    # Normally speaking, I'll need something to show that this variable is a
+    # class level variable, but since the instructions forbids other
+    # python features.attribute, I'll just use it as is.
+    total_count: int = 0
 
     name: str
     height: int
     age: int
-
-    # Class attribute: Shared by the whole factory
-    total_count = 0
 
     def __init__(self, name: str, height: int, age: int) -> None:
         """
@@ -26,17 +26,14 @@ class Plant:
         self.height = height
         self.age = age
 
-        # Increment the shared factory counter
         Plant.total_count += 1
 
-        # Display in the exact format required by the example
         print(f"Created: {self.name} ({self.height}cm, {self.age} days)")
 
 
 if __name__ == "__main__":
     print("=== Plant Factory Output ===")
 
-    # Streamlining: Store data in a list to create many plants efficiently
     garden_data = [
         ("Rose", 25, 30),
         ("Oak", 200, 365),
@@ -45,9 +42,7 @@ if __name__ == "__main__":
         ("Fern", 15, 120),
     ]
 
-    # Create all plants using a loop
     for name, height, age in garden_data:
         _ = Plant(name, height, age)
 
-    # Final summary using the class attribute
     print(f"Total plants created: {Plant.total_count}")
