@@ -1,67 +1,47 @@
 #!/usr/bin/env python3
-"""Module for a secure plant management system with data validation."""
+"""Module for Exercise 3: Plant Factory."""
 
 
-class SecurePlant:
+class Plant:
     """
-    A plant class that protects its data from invalid values.
-    Uses Encapsulation to ensure data integrity.
+    Blueprint for a plant.
+    Tracks total instances created using a class attribute.
     """
+
+    # Class attribute: Shared by the whole factory
+    total_count = 0
 
     def __init__(self, name: str, height: int, age: int) -> None:
-        """Initialize plant and set initial values through secure setters."""
-        self._name = name
-        self._height = 0
-        self._age = 0
+        """
+        Initialize the plant and update the factory counter.
+        Displays the creation message immediately.
+        """
+        self.name = name
+        self.height = height
+        self.age = age
 
-        print(f"Plant created: {self._name}")
-        self.set_height(height)
-        self.set_age(age)
+        # Increment the shared factory counter
+        Plant.total_count += 1
 
-    # --- Getters
-    def get_height(self) -> int:
-        """Return the current height."""
-        return self._height
-
-    def get_age(self) -> int:
-        """Return the current age."""
-        return self._age
-
-    # --- Setters
-    def set_height(self, value: int) -> None:
-        """Validate and set plant height."""
-        if value < 0:
-            print(f"Invalid operation attempted: height {value}cm [REJECTED]")
-            print("Security: Negative height rejected")
-        else:
-            self._height = value
-            print(f"Height updated: {value}cm [OK]")
-
-    def set_age(self, value: int) -> None:
-        """Validate and set plant age."""
-        if value < 0:
-            print(f"Invalid operation attempted: age {value} days [REJECTED]")
-            print("Security: Negative age rejected")
-        else:
-            self._age = value
-            print(f"Age updated: {value} days [OK]")
-
-    def get_info(self) -> str:
-        """Return a string representation of the plant."""
-        return (
-            f"Current plant: {self._name} ({self._height}cm, {self._age} days)"
-        )
+        # Display in the exact format required by the example
+        print(f"Created: {self.name} ({self.height}cm, {self.age} days)")
 
 
 if __name__ == "__main__":
-    print("=== Garden Security System ===")
+    print("=== Plant Factory Output ===")
 
-    # Create a plant
-    rose = SecurePlant("Rose", 25, 30)
-    print("")
+    # Streamlining: Store data in a list to create many plants efficiently
+    garden_data = [
+        ("Rose", 25, 30),
+        ("Oak", 200, 365),
+        ("Cactus", 5, 90),
+        ("Sunflower", 80, 45),
+        ("Fern", 15, 120),
+    ]
 
-    # Attempt an invalid operation (Negative height)
-    rose.set_height(-5)
+    # Create all plants using a loop
+    for name, height, age in garden_data:
+        Plant(name, height, age)
 
-    # Show final status
-    print(rose.get_info())
+    # Final summary using the class attribute
+    print(f"Total plants created: {Plant.total_count}")

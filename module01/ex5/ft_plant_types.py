@@ -39,7 +39,9 @@ class Flower(Plant):
 class Tree(Plant):
     """Subclass representing a tree."""
 
-    def __init__(self, name: str, height: int, age: int, diameter: int) -> None:
+    def __init__(
+        self, name: str, height: int, age: int, diameter: int
+    ) -> None:
         """Call parent setup and add trunk diameter."""
         super().__init__(name, height, age)
         self.trunk_diameter = diameter
