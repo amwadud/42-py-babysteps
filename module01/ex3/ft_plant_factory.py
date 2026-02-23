@@ -8,6 +8,12 @@ class Plant:
     Tracks total instances created using a class attribute.
     """
 
+    total_count: int
+
+    name: str
+    height: int
+    age: int
+
     # Class attribute: Shared by the whole factory
     total_count = 0
 
@@ -41,7 +47,7 @@ if __name__ == "__main__":
 
     # Create all plants using a loop
     for name, height, age in garden_data:
-        Plant(name, height, age)
+        _ = Plant(name, height, age)
 
     # Final summary using the class attribute
     print(f"Total plants created: {Plant.total_count}")

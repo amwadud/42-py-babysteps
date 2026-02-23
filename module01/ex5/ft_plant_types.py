@@ -5,6 +5,10 @@
 class Plant:
     """Base blueprint for all plant types."""
 
+    name: str
+    height: int
+    age: int
+
     def __init__(self, name: str, height: int, age: int) -> None:
         """Initialize common plant attributes."""
         self.name = name
@@ -19,6 +23,8 @@ class Plant:
 class Flower(Plant):
     """Subclass representing a flowering plant."""
 
+    color: str
+
     def __init__(self, name: str, height: int, age: int, color: str) -> None:
         """Call parent setup and add color."""
         super().__init__(name, height, age)
@@ -32,12 +38,14 @@ class Flower(Plant):
         """Match the output format: Name (Flower): ...."""
         print(
             f"{self.name} (Flower): {self.height}cm, "
-            f"{self.age} days, {self.color} color"
+            + f"{self.age} days, {self.color} color"
         )
 
 
 class Tree(Plant):
     """Subclass representing a tree."""
+
+    trunk_diameter: int
 
     def __init__(
         self, name: str, height: int, age: int, diameter: int
@@ -55,12 +63,15 @@ class Tree(Plant):
         """Match the output format: Name (Tree): ...."""
         print(
             f"{self.name} (Tree): {self.height}cm, "
-            f"{self.age} days, {self.trunk_diameter}cm diameter"
+            + f"{self.age} days, {self.trunk_diameter}cm diameter"
         )
 
 
 class Vegetable(Plant):
     """Subclass representing a vegetable plant."""
+
+    harvest_season: str
+    nutritional_value: str
 
     def __init__(
         self, name: str, height: int, age: int, season: str, nutrition: str
@@ -78,7 +89,7 @@ class Vegetable(Plant):
         """Match the output format: Name (Vegetable): ...."""
         print(
             f"{self.name} (Vegetable): {self.height}cm, "
-            f"{self.age} days, {self.harvest_season} harvest"
+            + f"{self.age} days, {self.harvest_season} harvest"
         )
 
 

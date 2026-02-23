@@ -5,6 +5,10 @@
 class Plant:
     """Blueprint for a plant with a name, height, and age."""
 
+    name: str
+    height: int
+    longevity: int
+
     def __init__(self, name: str, height: int, longevity: int) -> None:
         """Construct a new plant with attributes."""
         self.name = name
