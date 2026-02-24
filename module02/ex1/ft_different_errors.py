@@ -2,10 +2,16 @@
 
 
 def garden_operations() -> None:
-    print("=== Garden Error Types Demo ===")
+    print("=== Garden Error Types Demo ===\n")
 
-    missingfile = "missing.txt"
-    lst = {1, 2, 3, 4, 5}
+    missing_file: str = "missing.txt"
+    plant_names: dict[str, int] = {
+        "plant1": 10,
+        "plant2": 20,
+        "plant3": 30,
+    }
+    missing_plant: str = "missing\\_plant"
+    found_error: bool = False
 
     try:
         print("Testing ValueError...")
@@ -13,6 +19,7 @@ def garden_operations() -> None:
     except ValueError:
         print("Caught ValueError: invalid literal for int()")
         print()
+        found_error = True
 
     try:
         print("Testing ZeroDivisionError...")
@@ -20,19 +27,28 @@ def garden_operations() -> None:
     except ZeroDivisionError:
         print("Caught ZeroDivisionError: division by zero")
         print()
+        found_error = True
 
     try:
         print("Testing FileNotFoundError...")
-        _ = open(missingfile, "r")
+        _ = open(missing_file, "r")
     except FileNotFoundError:
-        print(f"Caught FileNotFoundError: No such file '{missingfile}'")
+        print(f"Caught FileNotFoundError: No such file '{missing_file}'")
         print()
+        found_error = True
 
     try:
         print("Testing KeyError...")
+        _ = plant_names[missing_plant]
     except KeyError:
-        print("Caught KeyError: Key not found in dictionary")
+        print(f"Caught KeyError: '{missing_plant}'")
         print()
+        found_error = True
+
+    print("Testing multiple errors together...")
+    if found_error:
+        print("Caught an error, but the program continues!")
+    print("All error types tested successfully!")
 
 
 if __name__ == "__main__":
