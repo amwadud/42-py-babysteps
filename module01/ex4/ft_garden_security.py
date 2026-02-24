@@ -8,6 +8,10 @@ class SecurePlant:
     Demonstrates the concept of Encapsulation.
     """
 
+    __name: str
+    __height: int
+    __age: int
+
     def __init__(self, name: str, height: int, age: int) -> None:
         """
         Construct a new plant.
