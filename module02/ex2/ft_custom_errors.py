@@ -1,43 +1,62 @@
 #!/usr/bin/env python3
+"""Solution for: Exercise 2 - Making Your Own Error Types"""
 
-class Plant:
-    """Blueprint for plant, mainly for testing errors."""
-    healthy: bool
-    thirsty: bool
-    def __init__(self, healthy: bool, thirsty: bool) -> None:
-        pass
 
 class GardenError(Exception):
-    """Base class for all garden-related errors."""
-    def __init__(self, message: str) -> None:
-        super().__init__(message)
+    """Base class for garden-related errors."""
+
+    pass
+
 
 class PlantError(GardenError):
-    """Error for plant-related problems."""
-    def __init__(self, message: str = "A plant problem occurred"):
-        super().__init__(message)
+    """Raised when there is a plant-related issue."""
 
-class WaterError(PlantError):
-    """Error for watering-related problems."""
-    def __init__(self, message: str = "A watering problem occurred"):
-        super().__init__(message)
+    pass
 
-def garden_demo():
-    print("=== Custom Garden Errors Demo ===\n")
+
+class WaterError(GardenError):
+    """Raised when there is a water-related issue."""
+
+    pass
+
+
+def test_plant_error():
+    print("Testing PlantError...")
     try:
-        print("Testing PlantError...")
-        plant = "tomato"
-        if (plant == "tomato")
-            raise PlantError()
-        if (plant == "tomato")
-            raise WaterError()
-        print("Testing WaterError...")
-    except PlantError:
-        print("Caught PlantError: The tomato plant is wilting!")
-    except WaterError:
-        print("Testing catching all garden errors...")
-    print("All custom error types work correctly!")
+        raise PlantError("The tomato plant is wilting!")
+    except PlantError as e:
+        print(f"Caught PlantError: {e}\n")
+
+
+def test_water_error():
+    print("Testing WaterError...")
+    try:
+        raise WaterError("Not enough water in the tank!")
+    except WaterError as e:
+        print(f"Caught WaterError: {e}\n")
+
+
+def test_catch_all():
+    print("Testing catching all garden errors...")
+    errors = [
+        PlantError("The tomato plant is wilting!"),
+        WaterError("Not enough water in the tank!"),
+    ]
+
+    for err in errors:
+        try:
+            raise err
+        except GardenError as e:
+            print(f"Caught a garden error: {e}")
+
+
+def main():
+    print("=== Custom Garden Errors Demo ===\n")
+    test_plant_error()
+    test_water_error()
+    test_catch_all()
+    print("\nAll custom error types work correctly!")
 
 
 if __name__ == "__main__":
-    garden_demo()
+    main()
