@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Exercise 5: Garden Management System."""
 
 
@@ -63,17 +64,21 @@ class GardenManager:
 def main() -> None:
     """Run the garden management system demo."""
     print("=== Garden Management System ===")
+    print()
     manager = GardenManager()
 
     print("Adding plants to garden...")
+    print()
     for args in [("tomato", 5, 8), ("lettuce", 3, 6), ("", 5, 8)]:
         try:
             manager.add_plant(*args)
         except PlantError as e:
             print(f"Error adding plant: {e}")
+    print()
 
     print("Watering plants...")
     manager.water_plants()
+    print()
 
     print("Checking plant health...")
     manager.plants["lettuce"]["water"] = 15
@@ -84,11 +89,13 @@ def main() -> None:
             print(f"Error checking {name}: {e}")
 
     print("Testing error recovery...")
+    print()
     try:
         raise WaterError("Not enough water in tank")
     except GardenError as e:
         print(f"Caught GardenError: {e}")
         print("System recovered and continuing...")
+    print()
 
     print("Garden management system test complete!")
 
