@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Exercise 5: Garden Management System."""
 
 
@@ -26,7 +25,7 @@ class GardenManager:
     plants: dict[str, dict[str, int]]
 
     def __init__(self) -> None:
-        """Initialize the garden with an empty plant list."""
+        """Initialize the garden with an empty plant dictionary."""
         self.plants = {}
 
     def add_plant(
@@ -68,7 +67,6 @@ def main() -> None:
     manager = GardenManager()
 
     print("Adding plants to garden...")
-    print()
     for args in [("tomato", 5, 8), ("lettuce", 3, 6), ("", 5, 8)]:
         try:
             manager.add_plant(*args)
@@ -87,9 +85,9 @@ def main() -> None:
             manager.check_health(name)
         except (PlantError, WaterError) as e:
             print(f"Error checking {name}: {e}")
+    print()
 
     print("Testing error recovery...")
-    print()
     try:
         raise WaterError("Not enough water in tank")
     except GardenError as e:

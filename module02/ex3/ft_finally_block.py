@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """Exercise 3: Finally Block - Always Clean Up."""
 
 
@@ -16,7 +18,7 @@ def water_plants(plant_list: list[str | None]) -> None:
         print("Closing watering system (cleanup)")
 
 
-def test_watering_system():
+def test_watering_system() -> None:
     """Demonstrate normal and error watering scenarios."""
     print("=== Garden Watering System ===")
     print()
@@ -32,5 +34,9 @@ def test_watering_system():
     print("Cleanup always happens, even with errors!")
 
 
-if __name__ == "__main__":
+def main() -> None:
     test_watering_system()
+
+
+if __name__ == "__main__":
+    main()

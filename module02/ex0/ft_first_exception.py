@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
-"""Exercise 0: First Exception Handling Example."""
 
 
 def check_temperature(temp_str: str) -> None:
-    """Checks if the temperature is suitable for plants."""
     try:
         val = int(temp_str)
         if val > 40:
@@ -17,8 +15,7 @@ def check_temperature(temp_str: str) -> None:
         print("That's not a valid number!")
 
 
-if __name__ == "__main__":
-    print("=== Garden Temperature Checker ===\n")
+def test_temperature_input() -> None:
     vals = ["25", "abc", "100", "-50"]
 
     for val in vals:
@@ -27,3 +24,12 @@ if __name__ == "__main__":
         print()
 
     print("All tests completed - program didn't crash!")
+
+
+def main() -> None:
+    print("=== Garden Temperature Checker ===\n")
+    test_temperature_input()
+
+
+if __name__ == "__main__":
+    main()

@@ -88,5 +88,9 @@ def test_plant_checks() -> None:
     print("All tests completed.")
 
 
-if __name__ == "__main__":
+def main() -> None:
     test_plant_checks()
+
+
+if __name__ == "__main__":
+    main()
