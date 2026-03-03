@@ -21,6 +21,7 @@ class WaterError(GardenError):
 
 
 def test_plant_error():
+    """Test catching a PlantError."""
     print("Testing PlantError...")
     try:
         raise PlantError("The tomato plant is wilting!")
@@ -29,6 +30,7 @@ def test_plant_error():
 
 
 def test_water_error():
+    """Test catching a WaterError."""
     print("Testing WaterError...")
     try:
         raise WaterError("Not enough water in the tank!")
@@ -37,6 +39,7 @@ def test_water_error():
 
 
 def test_catch_all():
+    """Test catching all garden errors with the base class."""
     print("Testing catching all garden errors...")
     errors = [
         PlantError("The tomato plant is wilting!"),

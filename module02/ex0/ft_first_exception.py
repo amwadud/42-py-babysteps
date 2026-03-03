@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+"""Exercise 0: First Exception Handling Example."""
 
 
 def check_temperature(temp_str: str) -> None:
+    """Checks if the temperature is suitable for plants."""
     try:
         val = int(temp_str)
         if val > 40:

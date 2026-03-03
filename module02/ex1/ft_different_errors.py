@@ -2,6 +2,7 @@
 
 
 def garden_operations() -> None:
+    """Functions that demonstrate various error types in a garden context."""
     print("=== Garden Error Types Demo ===\n")
 
     missing_file: str = "missing.txt"
