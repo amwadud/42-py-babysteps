@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-# Authorized: sys.argv, len(), sum(), max(), min(), int(), print(), try/except
-
 import sys
 
 
