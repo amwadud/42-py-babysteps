@@ -3,8 +3,6 @@
 # Authorized: import sys, sys.argv, import math, tuple(),
 # int(), float(), print(), split(), try/except, math.sqrt()
 
-from multiprocessing import Value
-from typing import override
 from math import sqrt
 
 
@@ -33,7 +31,6 @@ class Position:
     def get(self) -> tuple[int, int, int]:
         return (self.x, self.y, self.z)
 
-    @override
     def __str__(self) -> str:
         return str((self.x, self.y, self.z))
 
@@ -72,9 +69,18 @@ def game_coordinate_system() -> None:
         )
         print()
         print('Parsing invalid coordinates: "abc,def,ghi"')
+        _ = Position((int("w"), int("r"), int("g")))
     except ValueError as error:
         print(f"Error parsing coordinates: {error}")
-        print(f"Error details - Type: ValueError, Args: ({error},)")
+        print(
+            f"Error details - Type: {type(error).__name__}, Args: {error.args}"
+        )
+    print()
+    print("Unpacking demonstration:")
+    position = (3, 4, 0)
+    x, y, z = position
+    print(f"Player at x={x}, y={y}, z={z}")
+    print(f"Coordinates: X={x}, Y={y}, Z={z}")
 
 
 def main() -> None:
