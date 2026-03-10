@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-import sys
+
 import math
+import sys
 
 
 def calc_dist(
@@ -12,10 +13,13 @@ def calc_dist(
     )
 
 
-def parse_coords(coord_str: str) -> tuple[int, int, int]:
+def parse_coords(coord_str: str) -> tuple[float, float, float]:
     """Parse a comma-separated string into a 3D tuple."""
-    parts = coord_str.split(",")
-    return (int(parts[0]), int(parts[1]), int(parts[2]))
+    try:
+        parts = coord_str.split(",")
+        return (float(parts[0]), float(parts[1]), float(parts[2]))
+    except Exception as e:
+        raise ValueError(f"Invalid coordinate format: {e}")
 
 
 def main() -> None:
@@ -23,17 +27,28 @@ def main() -> None:
 
     # Basic Tuple Usage
     origin = (0, 0, 0)
-    spawn = (10, 20, 5)
-    print(f"Position created: {spawn}")
+    random_point = (10, 20, 5)
+    print(f"Position created: {random_point}")
     print(
-        f"Distance between {origin} and {spawn}: "
-        + f"{calc_dist(origin, spawn):.2f}\n"
+        f"Distance between {origin} and {random_point}: "
+        + f"{calc_dist(origin, random_point):.2f}\n"
     )
 
     # Parsing coordinates using split()
-    coord_input = "3,4,0"
+    if len(sys.argv) > 1:
+        coord_input = sys.argv[1]
+    else:
+        coord_input = "3,4,0"
+
     print(f'Parsing coordinates: "{coord_input}"')
-    parsed_pos = parse_coords(coord_input)
+    try:
+        parsed_pos = parse_coords(coord_input)
+    except Exception:
+        print(
+            "[ERROR]: Value isn't in the correct format 'x,y,z', Setting a default value: 3,4,0"
+        )
+        parsed_pos = (3, 4, 0)
+
     print(f"Parsed position: {parsed_pos}")
     dist_parsed = calc_dist(origin, parsed_pos)
     print(f"Distance between {origin} and {parsed_pos}: {dist_parsed}\n")

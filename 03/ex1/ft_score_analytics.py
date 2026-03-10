@@ -13,17 +13,20 @@ def display_stats(scores: list[int]) -> None:
     print(f"Score range: {max(scores) - min(scores)}")
 
 
+def usage() -> None:
+    print(
+        "No scores provided. Usage: python3 ft_score_analytics.py "
+        + "<score1> <score2> ..."
+    )
+
+
 def main() -> None:
     print("=== Player Score Analytics ===")
     if len(sys.argv) == 1:
-        print(
-            "No scores provided. Usage: python3 ft_score_analytics.py "
-            "<score1> <score2> ..."
-        )
+        usage()
         return
 
     try:
-        # Mastery of list collection
         scores = [int(arg) for arg in sys.argv[1:]]
         display_stats(scores)
     except ValueError:
