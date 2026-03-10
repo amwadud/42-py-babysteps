@@ -30,7 +30,7 @@ def garden_operations() -> None:
     print("Testing KeyError...")
     try:
         plant_data: dict[str, int] = {"tomato": 3}
-        _ = plant_data["missing_plant"]
+        _ = plant_data["missing\\_plant"]
     except KeyError as e:
         print(f"Caught KeyError: {e}")
     print()
