@@ -1,0 +1,5 @@
+        detected_level = "INFO"
+        for level in self._log_levels:
+            if level in data_upper:
+                detected_level = level
+                break

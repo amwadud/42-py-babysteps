@@ -1,0 +1,4 @@
+    def validate(self, data: list | tuple | int | float) -> bool:
+        if isinstance(data, (list, tuple)):
+            return any(isinstance(x, (int, float)) for x in data)
+        return isinstance(data, (int, float))

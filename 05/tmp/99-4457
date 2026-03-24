@@ -1,0 +1,29 @@
+class LogProcessor(DataProcessor):
+    """Processor for log entries."""
+
+    def format_output(self, result: str) -> str:
+        return f"[RESULT] {result}"
+
+    def validate(self, data: str) -> bool:
+        return isinstance(data, str) and len(data.strip()) > 0 and ":" in data
+
+    def process(self, data: str) -> str:
+        if not self.validate(data):
+            return "Error: Invalid log data"
+        log_levels = ["ERROR", "WARNING", "INFO", "DEBUG", "CRITICAL"]
+
+        data_upper = data.upper()
+        detected_level = "INFO"
+        for level in log_levels:
+            if level in data_upper:
+                detected_level = level
+                break
+
+        message = data.split(":", 1)[1].strip()
+        prefix = (
+            "[ALERT]"
+            if detected_level in ("ERROR", "CRITICAL")
+            else f"[{detected_level}]"
+        )
+
+        return self.format_output(f"{prefix} {detected_level} detected: {message}")

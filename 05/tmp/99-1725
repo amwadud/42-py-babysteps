@@ -1,0 +1,27 @@
+    def format_output(self, result: str) -> str:
+        return f"[RESULT] {result}"
+
+    def process(self, data: list | tuple | int | float) -> str:
+        try:
+            if isinstance(data, (list, tuple)):
+                numbers = [
+                    float(x) for x in data if isinstance(x, (int, float))
+                ]
+                if numbers:
+                    total = sum(numbers)
+                    return self.format_output(f"sum={total}, avg={total / len(numbers)}")
+                return self.format_output("No numeric values found")
+            return self.format_output(str(float(data)))
+        except ValueError as e:
+            return self.format_output(f"Invalid numeric value: {e}")
+        except TypeError as e:
+            return self.format_output(f"Unsupported data type: {e}")
+        except OverflowError as e:
+            return self.format_output(f"Number too large: {e}")
+
+    def validate(self, data: list | tuple | int | float) -> bool:
+        if isinstance(data, (list, tuple)):
+            for x in data:
+                if not isinstance(x, (int, float)):
+                    return False
+        return isinstance(data, (int, float))

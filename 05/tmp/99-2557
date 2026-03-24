@@ -1,0 +1,9 @@
+    processor_data_combos: tuple[tuple[DataProcessor, Any], ...] = (
+        (NumericProcessor(), [1, 2, 3]),
+        (TextProcessor(), "Hello World"),
+        (LogProcessor(), "INFO: System ready"),
+    )
+
+    for i, (proc, data) in enumerate(processor_data_combos, 1):
+        result = proc.process(data)
+        print(f"Result {i}: {result}")

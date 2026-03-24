@@ -1,0 +1,15 @@
+from abc import ABC, abstractmethod
+from typing import TypeVar
+
+T = TypeVar("T", bound="int | float | list[int | float] | tuple[int | float, ...]")
+
+
+class DataProcessor(ABC):
+    @abstractmethod
+    def process(self, data: T) -> str: ...
+
+    @abstractmethod
+    def validate(self, data: T) -> bool: ...
+
+    def format_output(self, result: str) -> str:
+        return result

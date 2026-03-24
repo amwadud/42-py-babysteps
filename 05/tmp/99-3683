@@ -1,0 +1,4 @@
+    def format_output(self, result: str) -> str:
+        import datetime
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        return f"[{timestamp}] {result}"

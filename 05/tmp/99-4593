@@ -1,0 +1,6 @@
+    def process(self, data: Any) -> str:
+        if isinstance(data, (list, tuple)):
+            numbers = [float(x) for x in data if isinstance(x, (int, float))]
+            if numbers:
+                return f"sum={sum(numbers)}, avg={sum(numbers)/len(numbers)}"
+        return str(data)

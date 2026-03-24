@@ -1,0 +1,15 @@
+class NumericProcessor(DataProcessor):
+    def process(self, data: Any) -> str:
+        try:
+            if isinstance(data, (list, tuple)):
+                numbers = [float(x) for x in data if isinstance(x, (int, float))]
+                if numbers:
+                    return f"sum={sum(numbers)}, avg={sum(numbers)/len(numbers)}"
+            return str(data)
+        except (ValueError, TypeError, OverflowError) as e:
+            return f"Error processing data: {e}"
+
+    def validate(self, data: Any) -> bool:
+        if isinstance(data, (list, tuple)):
+            return any(isinstance(x, (int, float)) for x in data)
+        return isinstance(data, (int, float))

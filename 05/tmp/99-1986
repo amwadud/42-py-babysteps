@@ -1,0 +1,19 @@
+    def process(self, data: str) -> str:
+        if not self.validate(data):
+            return "Error: Invalid log data"
+
+        data_upper = data.upper()
+        detected_level = "INFO"
+        for level in self._log_levels:
+            if level in data_upper:
+                detected_level = level
+                break
+
+        message = data.split(":", 1)[1].strip()
+        prefix = (
+            "[ALERT]"
+            if detected_level in ("ERROR", "CRITICAL")
+            else f"[{detected_level}]"
+        )
+
+        return f"{prefix} {detected_level} detected: {message}"

@@ -1,3 +1,17 @@
+<Context>
+You receive a selection in neovim that you need to replace with new code.
+The selection's contents may contain notes, incorporate the notes every time if there are some.
+consider the context of the selection and what you are suppose to be implementing
+<SELECTION_LOCATION>
+range(point(84,1),point(87,10))
+</SELECTION_LOCATION>
+<SELECTION_CONTENT>
+        detected_level = next(
+            (level for level in self._log_levels if level in data_upper),
+            "INFO",
+        )
+</SELECTION_CONTENT>
+<FILE_CONTAINING_SELECTION>
 #!/usr/bin/env python3
 
 from abc import ABC, abstractmethod
@@ -14,10 +28,13 @@ class DataProcessor(ABC):
         pass
 
     def format_output(self, result: str) -> str:
-        return f"Output: {result}"
+        return result
 
 
 class NumericProcessor(DataProcessor):
+    def format_output(self, result: str) -> str:
+        return f"[RESULT] {result}"
+
     def process(self, data: list | tuple | int | float) -> str:
         try:
             if isinstance(data, (list, tuple)):
@@ -27,8 +44,7 @@ class NumericProcessor(DataProcessor):
                 if numbers:
                     total = sum(numbers)
                     return self.format_output(
-                        f"Processed {len(numbers)} numeric values, "
-                        f"sum={int(total)}, avg={total / len(numbers)}"
+                        f"sum={total}, avg={total / len(numbers)}"
                     )
                 return self.format_output("No numeric values found")
             return self.format_output(str(float(data)))
@@ -48,13 +64,15 @@ class NumericProcessor(DataProcessor):
 
 
 class TextProcessor(DataProcessor):
+    def format_output(self, result: str) -> str:
+        return f"[RESULT] {result}"
+
     def process(self, data: str) -> str:
         if isinstance(data, str):
             words_count = len(data.split())
             chars_count = len(data)
             return self.format_output(
-                f"Processed text: {chars_count} characters, "
-                f"{words_count} words"
+                f"words={words_count}, characters={chars_count}"
             )
 
     def validate(self, data: str) -> bool:
@@ -64,20 +82,23 @@ class TextProcessor(DataProcessor):
 
 
 class LogProcessor(DataProcessor):
-    def validate(self, data: str) -> bool:
+    """Processor for log entries."""
+
+    def __init__(self) -> None:
+        self._log_levels = ["ERROR", "WARNING", "INFO", "DEBUG", "CRITICAL"]
+
+    def validate(self, data: Any) -> bool:
         return isinstance(data, str) and len(data.strip()) > 0 and ":" in data
 
-    def process(self, data: str) -> str:
+    def process(self, data: Any) -> str:
         if not self.validate(data):
-            return self.format_output("Error: Invalid log data")
-        log_levels = ["ERROR", "WARNING", "INFO", "DEBUG", "CRITICAL"]
+            return "Error: Invalid log data"
 
         data_upper = data.upper()
-        detected_level = "INFO"
-        for level in log_levels:
-            if level in data_upper:
-                detected_level = level
-                break
+        detected_level = next(
+            (level for level in self._log_levels if level in data_upper),
+            "INFO",
+        )
 
         message = data.split(":", 1)[1].strip()
         prefix = (
@@ -86,50 +107,36 @@ class LogProcessor(DataProcessor):
             else f"[{detected_level}]"
         )
 
-        return self.format_output(
-            f"{prefix} {detected_level} level detected: {message}"
-        )
+        return f"{prefix} {detected_level} level detected: {message}"
 
 
 def main() -> None:
-    print("=== CODE NEXUS - DATA PROCESSOR FOUNDATION ===\n")
-
-    numeric = NumericProcessor()
-    print("Initializing Numeric Processor...")
-    numeric_data = [1, 2, 3, 4, 5]
-    print(f"Processing data: {numeric_data}")
-    print(numeric.process(numeric_data))
-    print()
-
-    text = TextProcessor()
-    print("Initializing Text Processor...")
-    text_data = "Hello Nexus World"
-    print(f'Processing data: "{text_data}"')
-    print(text.process(text_data))
-    print()
-
-    log = LogProcessor()
-    print("Initializing Log Processor...")
-    log_data = "ERROR: Connection timeout"
-    print(f'Processing data: "{log_data}"')
-    print(log.process(log_data))
-    print()
-
-    print("=== Polymorphic Processing Demo ===")
-    print("Processing multiple data types through same interface...\n")
-
-    processor_data_combos: tuple[tuple[DataProcessor, Any], ...] = (
-        (NumericProcessor(), [1, 2, 3]),
-        (TextProcessor(), "Hello World"),
-        (LogProcessor(), "INFO: System ready"),
-    )
-
-    for i, (proc, data) in enumerate(processor_data_combos, 1):
-        result = proc.process(data)
-        print(f"Result {i}: {result.split(':', 1)[1].strip()}")
-
-    print("\nFoundation systems online. Nexus ready for advanced streams.")
+    pass
 
 
 if __name__ == "__main__":
     main()
+</FILE_CONTAINING_SELECTION>
+
+</Context>
+<Prompt>
+do this with s simple for loop.
+</Prompt>
+
+<Location><File>/home/aksel/project/school/python_modules/05/ex0/stream_processor.py</File><Function>range(point(84,1),point(87,10))</Function></Location>
+<FunctionText>        detected_level = next(
+            (level for level in self._log_levels if level in data_upper),
+            "INFO",
+        )</FunctionText>
+<TEMP_FILE>./tmp/99-2317</TEMP_FILE>
+<MustObey>
+NEVER alter any file other than TEMP_FILE.
+never provide the requested changes as conversational output. Return only the code.
+ONLY provide requested changes by writing the change to TEMP_FILE
+
+never attempt to read TEMP_FILE.
+It is purely for output.
+Previous contents, which may not exist, can be written over without worry
+After writing TEMP_FILE once you should be done.  Be done and end the session.
+
+</MustObey>
