@@ -82,7 +82,7 @@ class StreamProcessor:
         results = []
         for i in range(len(self.streams)):
             if i < len(batches):
-                # Polymorphism: same method call, different behavior
+                # Polymorphism: same interface, different implementations
                 result = self.streams[i].process_batch(batches[i])
                 results.append(result)
         return results

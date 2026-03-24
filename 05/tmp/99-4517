@@ -49,10 +49,7 @@ class TransactionStream(DataStream):
                 net += t["buy"]
             if "sell" in t:
                 net -= t["sell"]
-        return (
-            f"Transaction analysis: {len(data_batch)} operations, "
-            f"net flow: {net:+d} units"
-        )
+        return f"Transaction analysis: {len(data_batch)} operations, net flow: {net:+d} units"
 
 
 class EventStream(DataStream):
@@ -63,10 +60,7 @@ class EventStream(DataStream):
         for e in data_batch:
             if e == "error":
                 errors += 1
-        return (
-            f"Event analysis: {len(data_batch)} events, "
-            f"{errors} error detected"
-        )
+        return f"Event analysis: {len(data_batch)} events, {errors} error detected"
 
 
 class StreamProcessor:
@@ -121,7 +115,7 @@ def main() -> None:
     print("Processing mixed stream types through unified interface...")
     print()
 
-    # Polymorphism: same interface, different implementations
+    # Polymorphism in action: same interface, different implementations
     processor = StreamProcessor()
     processor.add_stream(sensor)
     processor.add_stream(trans)
