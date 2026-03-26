@@ -1,0 +1,1 @@
+    print(f"Initializing Sensor Stream... Stream ID: {sensor.stream_id}, Type: {data['sensor']['type']}, Processing sensor batch: {sensor_batch}, Result: {sensor.process_batch(sensor_batch)}")

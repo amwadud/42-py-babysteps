@@ -1,0 +1,5 @@
+    print(
+        f"Initializing Transaction Stream... Stream ID: {trans.stream_id}, "
+        f"Type: {data['trans']['type']}, Processing transaction batch: "
+        f"{trans_batch}, Result: {trans.process_batch(trans_batch)}"
+    )

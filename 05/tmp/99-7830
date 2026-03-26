@@ -1,0 +1,6 @@
+    trans: TransactionStream = data[1][1]
+    print("Initializing Transaction Stream...")
+    print(f"Stream ID: {trans.stream_id}, Type: {data[1][0]}")
+    print(f"Processing transaction batch: {data[1][2]}")
+    print(trans.process_batch(data[1][2]))
+    print()

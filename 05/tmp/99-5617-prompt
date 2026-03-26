@@ -1,3 +1,25 @@
+<Context>
+You receive a selection in neovim that you need to replace with new code.
+The selection's contents may contain notes, incorporate the notes every time if there are some.
+consider the context of the selection and what you are suppose to be implementing
+<SELECTION_LOCATION>
+range(point(111,1),point(122,71))
+</SELECTION_LOCATION>
+<SELECTION_CONTENT>
+def process_and_format_data(
+    stream: DataStream, data: list[list[Any]] | list[Any]
+) -> str:
+    raw_format = stream.process_batch(data)
+    if isinstance(stream, StreamProcessor):
+        return "[temp:22.5, humidity:65, pressure:1013]"
+    elif isinstance(stream, TransactionStream):
+        return "[buy:100, sell:150, buy:75]"
+    elif isinstance(stream, EventStream):
+        return "[login, error, logout]"
+    else:
+        raise TypeError("[ERROR]: Types should be of type DataStream")
+</SELECTION_CONTENT>
+<FILE_CONTAINING_SELECTION>
 from abc import ABC, abstractmethod
 from typing import Any
 
@@ -6,45 +28,21 @@ class DataStream(ABC):
     """Abstract base class for all stream types."""
 
     def __init__(self, stream_id: str) -> None:
-        """Initialize the data stream with an identifier.
-
-        Args:
-            stream_id: Unique identifier for this stream.
-        """
         self.stream_id: str = stream_id
 
     @abstractmethod
     def process_batch(self, data_batch: list[Any]) -> str:
-        """Process data and return result string.
-
-        Args:
-            data_batch: List of data items to process.
-
-        Returns:
-            A string describing the processing results.
-        """
+        """Process data and return result string."""
         pass
 
     def filter_data(
         self, data_batch: list[Any], criteria: str | None = None
     ) -> list[Any]:
-        """Filter data based on criteria.
-
-        Args:
-            data_batch: List of data items to filter.
-            criteria: Optional filter criteria string.
-
-        Returns:
-            Filtered list of data items.
-        """
+        """Filter data based on criteria."""
         return data_batch
 
     def get_stats(self) -> dict[str, Any]:
-        """Return stream statistics.
-
-        Returns:
-            Dictionary containing stream statistics.
-        """
+        """Return stream statistics."""
         return {"stream_id": self.stream_id, "processed": 0}
 
 
@@ -52,15 +50,6 @@ class SensorStream(DataStream):
     """Process sensor/temperature data."""
 
     def process_batch(self, data_batch: list[Any]) -> str:
-        """Process temperature sensor data and calculate average.
-
-        Args:
-            data_batch: List of sensor data dictionaries with 'temp' keys.
-
-        Returns:
-            String describing processing results
-            with count and average temperature.
-        """
         temps: list[float] = []
         count: int = len(data_batch)
         for d in data_batch:
@@ -74,15 +63,6 @@ class SensorStream(DataStream):
     def filter_data(
         self, data_batch: list[Any], criteria: str | None = None
     ) -> list[Any]:
-        """Filter sensor data by priority level.
-
-        Args:
-            data_batch: List of sensor data items.
-            criteria: Filter criteria - 'high-priority' returns temps > 20.
-
-        Returns:
-            Filtered list of sensor data.
-        """
         if criteria == "high-priority":
             return [
                 d for d in data_batch if "temp" in d and d.get("temp", 0) > 20
@@ -94,15 +74,6 @@ class TransactionStream(DataStream):
     """Process financial transaction data."""
 
     def process_batch(self, data_batch: list[Any]) -> str:
-        """Process financial transactions and calculate net flow.
-
-        Args:
-            data_batch: List of transaction dictionaries
-            with 'buy' or 'sell' keys.
-
-        Returns:
-            String describing transaction processing results with net flow.
-        """
         net: int = 0
         for t in data_batch:
             if "buy" in t:
@@ -117,15 +88,6 @@ class TransactionStream(DataStream):
     def filter_data(
         self, data_batch: list[Any], criteria: str | None = None
     ) -> list[Any]:
-        """Filter transactions by size.
-
-        Args:
-            data_batch: List of transaction data items.
-            criteria: Filter criteria - 'large' returns transactions > 100.
-
-        Returns:
-            Filtered list of transactions.
-        """
         if criteria == "large":
             return [
                 d
@@ -140,14 +102,6 @@ class EventStream(DataStream):
     """Process system event data."""
 
     def process_batch(self, data_batch: list[Any]) -> str:
-        """Process system events and count errors.
-
-        Args:
-            data_batch: List of event strings.
-
-        Returns:
-            String describing event processing with error count.
-        """
         errors: int = 0
         for e in data_batch:
             if e == "error":
@@ -162,26 +116,12 @@ class StreamProcessor:
     """Manages multiple streams and processes them polymorphically."""
 
     def __init__(self) -> None:
-        """Initialize the stream processor with an empty stream list."""
         self.streams: list[DataStream] = []
 
     def add_stream(self, stream: DataStream) -> None:
-        """Add a data stream to the processor.
-
-        Args:
-            stream: DataStream instance to add.
-        """
         self.streams.append(stream)
 
     def process_all(self, batches: list[list[Any]]) -> list[str]:
-        """Process all streams with their corresponding data batches.
-
-        Args:
-            batches: List of data batches, one per stream.
-
-        Returns:
-            List of result strings from processing each stream.
-        """
         results: list[str] = []
         for i in range(len(self.streams)):
             if i < len(batches):
@@ -190,8 +130,21 @@ class StreamProcessor:
         return results
 
 
+def process_and_format_data(
+    stream: DataStream, data: list[list[Any]] | list[Any]
+) -> str:
+    raw_format = stream.process_batch(data)
+    if isinstance(stream, StreamProcessor):
+        return "[temp:22.5, humidity:65, pressure:1013]"
+    elif isinstance(stream, TransactionStream):
+        return "[buy:100, sell:150, buy:75]"
+    elif isinstance(stream, EventStream):
+        return "[login, error, logout]"
+    else:
+        raise TypeError("[ERROR]: Types should be of type DataStream")
+
+
 def main() -> None:
-    """Run the polymorphic stream processing demonstration."""
     print("=== CODE NEXUS - POLYMORPHIC STREAM SYSTEM ===")
     print()
 
@@ -280,3 +233,38 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+</FILE_CONTAINING_SELECTION>
+
+</Context>
+<Prompt>
+use raw_format and use it to format the return value should be in this format for StreamProcessor [temp:22.5, humidity:65, pressure:1013] and for TransactionStream it has to be like this: [buy:100, sell:150, buy:75] and for EventStream it has to be: [login, error, logout] as a str.
+
+
+NOTE: i'm talking about the final format for the string not the actual values inside of the formatting.
+</Prompt>
+
+<Location><File>/home/aksel/project/school/python_modules/05/ex1/data_stream.py</File><Function>range(point(111,1),point(122,71))</Function></Location>
+<FunctionText>def process_and_format_data(
+    stream: DataStream, data: list[list[Any]] | list[Any]
+) -> str:
+    raw_format = stream.process_batch(data)
+    if isinstance(stream, StreamProcessor):
+        return "[temp:22.5, humidity:65, pressure:1013]"
+    elif isinstance(stream, TransactionStream):
+        return "[buy:100, sell:150, buy:75]"
+    elif isinstance(stream, EventStream):
+        return "[login, error, logout]"
+    else:
+        raise TypeError("[ERROR]: Types should be of type DataStream")</FunctionText>
+<TEMP_FILE>./tmp/99-5617</TEMP_FILE>
+<MustObey>
+NEVER alter any file other than TEMP_FILE.
+never provide the requested changes as conversational output. Return only the code.
+ONLY provide requested changes by writing the change to TEMP_FILE
+
+never attempt to read TEMP_FILE.
+It is purely for output.
+Previous contents, which may not exist, can be written over without worry
+After writing TEMP_FILE once you should be done.  Be done and end the session.
+
+</MustObey>

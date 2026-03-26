@@ -1,0 +1,17 @@
+    data: list[tuple[str, DataStream, list[Any]]] = [
+        (
+            "Environmental Data",
+            SensorStream("SENSOR_001"),
+            [{"temp": 22.5, "humidity": 65, "pressure": 1013}],
+        ),
+        (
+            "Financial Data",
+            TransactionStream("TRANS_001"),
+            [{"buy": 100}, {"sell": 150}, {"buy": 75}],
+        ),
+        (
+            "System Events",
+            EventStream("EVENT_001"),
+            ["login", "error", "logout"],
+        ),
+    ]

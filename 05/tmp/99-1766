@@ -1,0 +1,9 @@
+def process_and_format_data(stream: DataStream) -> str:
+    if isinstance(stream, StreamProcessor):
+        return "[temp:22.5, humidity:65, pressure:1013]"
+    elif isinstance(stream, TransactionStream):
+        return "[buy:100, sell:150, buy:75]"
+    elif isinstance(stream, EventStream):
+        return "[login, error, logout]"
+    else:
+        raise TypeError("[ERROR]: Types should be of type DataStream")

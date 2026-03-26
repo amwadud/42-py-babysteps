@@ -1,0 +1,6 @@
+    print(
+        f"Initializing Event Stream... Stream ID: {event.stream_id}, "
+        f"Type: {data['event']['type']}, Processing event batch: "
+        f"{event_batch}, Result: {event.process_batch(event_batch)}"
+    )
+    print()

@@ -1,0 +1,6 @@
+    sensor: SensorStream = SensorStream("SENSOR_001")
+    print("Initializing Sensor Stream...")
+    print(f"Stream ID: {sensor.stream_id}, Type: Environmental Data")
+    print(f"Processing sensor batch: [{'temp': 22.5, 'humidity': 65, 'pressure': 1013}]")
+    print(sensor.process_batch([{"temp": 22.5, "humidity": 65, "pressure": 1013}]))
+    print()

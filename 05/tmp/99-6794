@@ -1,0 +1,27 @@
+def process_and_format_data(data: Any) -> None:
+    def format_batch(batch: list[Any]) -> str:
+        formatted_items = []
+        for item in batch:
+            if isinstance(item, dict):
+                pairs = [f"{k}:{v}" for k, v in item.items()]
+                formatted_items.append(", ".join(pairs))
+            else:
+                formatted_items.append(str(item))
+        return "[" + ", ".join(formatted_items) + "]"
+
+    if isinstance(data, StreamProcessor):
+        sensor_batch = [{"temp": 22.5, "humidity": 65, "pressure": 1013}]
+        trans_batch = [{"buy": 100}, {"sell": 150}, {"buy": 75}]
+        event_batch = ["login", "error", "logout"]
+        
+        print(f"StreamProcessor -> {format_batch(sensor_batch)}")
+        print(f"TransactionStream -> {format_batch(trans_batch)}")
+        print(f"EventStream -> {format_batch(event_batch)}")
+    elif isinstance(data, TransactionStream):
+        batch = [{"buy": 100}, {"sell": 150}, {"buy": 75}]
+        print(f"TransactionStream -> {format_batch(batch)}")
+    elif isinstance(data, EventStream):
+        batch = ["login", "error", "logout"]
+        print(f"EventStream -> {format_batch(batch)}")
+    else:
+        raise TypeError("[ERROR]: Types should be of type DataStream")

@@ -1,0 +1,4 @@
+    print(
+        "=== Polymorphic Stream Processing ===\n"
+        "    Processing mixed stream types through unified interface...\n"
+    )

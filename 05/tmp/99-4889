@@ -1,0 +1,8 @@
+def process_and_format_data(
+    stream: DataStream, data: list[list[Any]] | list[Any]
+) -> str:
+    raw_format = stream.process_batch(data)
+    if isinstance(stream, DataStream):
+        return raw_format
+    else:
+        raise TypeError("[ERROR]: Types should be of type DataStream")

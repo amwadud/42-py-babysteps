@@ -1,3 +1,18 @@
+<Context>
+You receive a selection in neovim that you need to replace with new code.
+The selection's contents may contain notes, incorporate the notes every time if there are some.
+consider the context of the selection and what you are suppose to be implementing
+<SELECTION_LOCATION>
+range(point(143,1),point(147,12))
+</SELECTION_LOCATION>
+<SELECTION_CONTENT>
+    print()
+
+    event: EventStream = data["event"]["var"]
+    event_batch = data["event"]["batch"]
+    print("
+</SELECTION_CONTENT>
+<FILE_CONTAINING_SELECTION>
 from abc import ABC, abstractmethod
 from typing import Any
 
@@ -6,45 +21,21 @@ class DataStream(ABC):
     """Abstract base class for all stream types."""
 
     def __init__(self, stream_id: str) -> None:
-        """Initialize the data stream with an identifier.
-
-        Args:
-            stream_id: Unique identifier for this stream.
-        """
         self.stream_id: str = stream_id
 
     @abstractmethod
     def process_batch(self, data_batch: list[Any]) -> str:
-        """Process data and return result string.
-
-        Args:
-            data_batch: List of data items to process.
-
-        Returns:
-            A string describing the processing results.
-        """
+        """Process data and return result string."""
         pass
 
     def filter_data(
         self, data_batch: list[Any], criteria: str | None = None
     ) -> list[Any]:
-        """Filter data based on criteria.
-
-        Args:
-            data_batch: List of data items to filter.
-            criteria: Optional filter criteria string.
-
-        Returns:
-            Filtered list of data items.
-        """
+        """Filter data based on criteria."""
         return data_batch
 
     def get_stats(self) -> dict[str, Any]:
-        """Return stream statistics.
-
-        Returns:
-            Dictionary containing stream statistics.
-        """
+        """Return stream statistics."""
         return {"stream_id": self.stream_id, "processed": 0}
 
 
@@ -52,15 +43,6 @@ class SensorStream(DataStream):
     """Process sensor/temperature data."""
 
     def process_batch(self, data_batch: list[Any]) -> str:
-        """Process temperature sensor data and calculate average.
-
-        Args:
-            data_batch: List of sensor data dictionaries with 'temp' keys.
-
-        Returns:
-            String describing processing results
-            with count and average temperature.
-        """
         temps: list[float] = []
         count: int = len(data_batch)
         for d in data_batch:
@@ -74,15 +56,6 @@ class SensorStream(DataStream):
     def filter_data(
         self, data_batch: list[Any], criteria: str | None = None
     ) -> list[Any]:
-        """Filter sensor data by priority level.
-
-        Args:
-            data_batch: List of sensor data items.
-            criteria: Filter criteria - 'high-priority' returns temps > 20.
-
-        Returns:
-            Filtered list of sensor data.
-        """
         if criteria == "high-priority":
             return [
                 d for d in data_batch if "temp" in d and d.get("temp", 0) > 20
@@ -94,15 +67,6 @@ class TransactionStream(DataStream):
     """Process financial transaction data."""
 
     def process_batch(self, data_batch: list[Any]) -> str:
-        """Process financial transactions and calculate net flow.
-
-        Args:
-            data_batch: List of transaction dictionaries
-            with 'buy' or 'sell' keys.
-
-        Returns:
-            String describing transaction processing results with net flow.
-        """
         net: int = 0
         for t in data_batch:
             if "buy" in t:
@@ -117,15 +81,6 @@ class TransactionStream(DataStream):
     def filter_data(
         self, data_batch: list[Any], criteria: str | None = None
     ) -> list[Any]:
-        """Filter transactions by size.
-
-        Args:
-            data_batch: List of transaction data items.
-            criteria: Filter criteria - 'large' returns transactions > 100.
-
-        Returns:
-            Filtered list of transactions.
-        """
         if criteria == "large":
             return [
                 d
@@ -140,14 +95,6 @@ class EventStream(DataStream):
     """Process system event data."""
 
     def process_batch(self, data_batch: list[Any]) -> str:
-        """Process system events and count errors.
-
-        Args:
-            data_batch: List of event strings.
-
-        Returns:
-            String describing event processing with error count.
-        """
         errors: int = 0
         for e in data_batch:
             if e == "error":
@@ -162,26 +109,12 @@ class StreamProcessor:
     """Manages multiple streams and processes them polymorphically."""
 
     def __init__(self) -> None:
-        """Initialize the stream processor with an empty stream list."""
         self.streams: list[DataStream] = []
 
     def add_stream(self, stream: DataStream) -> None:
-        """Add a data stream to the processor.
-
-        Args:
-            stream: DataStream instance to add.
-        """
         self.streams.append(stream)
 
     def process_all(self, batches: list[list[Any]]) -> list[str]:
-        """Process all streams with their corresponding data batches.
-
-        Args:
-            batches: List of data batches, one per stream.
-
-        Returns:
-            List of result strings from processing each stream.
-        """
         results: list[str] = []
         for i in range(len(self.streams)):
             if i < len(batches):
@@ -191,7 +124,6 @@ class StreamProcessor:
 
 
 def main() -> None:
-    """Run the polymorphic stream processing demonstration."""
     print("=== CODE NEXUS - POLYMORPHIC STREAM SYSTEM ===")
     print()
 
@@ -215,35 +147,27 @@ def main() -> None:
 
     sensor: SensorStream = data["sensor"]["var"]
     sensor_batch = data["sensor"]["batch"]
-    print(
-        f"Initializing Sensor Stream... \n"
-        f"Stream ID: {sensor.stream_id}, Type: {data['sensor']['type']},\n"
-        f"Processing sensor batch: {sensor_batch}, \n"
-        f"{sensor.process_batch(sensor_batch)}\n"
-    )
+    print(f"Initializing Sensor Stream... Stream ID: {sensor.stream_id}, Type: {data['sensor']['type']}, Processing sensor batch: {sensor_batch}, Result: {sensor.process_batch(sensor_batch)}")
 
     trans: TransactionStream = data["trans"]["var"]
     trans_batch = data["trans"]["batch"]
-    print(
-        f"Initializing Transaction Stream... \n"
-        f"Stream ID: {trans.stream_id}, Type: {data['trans']['type']}\n"
-        f"Processing transaction batch: {trans_batch}\n"
-        f"{trans.process_batch(trans_batch)}\n"
-    )
+    print("Initializing Transaction Stream...")
+    print(f"Stream ID: {trans.stream_id}, Type: {data['trans']['type']}")
+    print(f"Processing transaction batch: {trans_batch}")
+    print(trans.process_batch(trans_batch))
+    print()
 
     event: EventStream = data["event"]["var"]
     event_batch = data["event"]["batch"]
-    print(
-        f"Initializing Event Stream...\n"
-        f"Stream ID: {event.stream_id}, Type: {data['event']['type']}\n"
-        f"Processing event batch: {event_batch}\n"
-        f"{event.process_batch(event_batch)}\n"
-    )
+    print("Initializing Event Stream...")
+    print(f"Stream ID: {event.stream_id}, Type: {data['event']['type']}")
+    print(f"Processing event batch: {event_batch}")
+    print(event.process_batch(event_batch))
+    print()
 
-    print(
-        "=== Polymorphic Stream Processing ===\n"
-        "    Processing mixed stream types through unified interface...\n"
-    )
+    print("=== Polymorphic Stream Processing ===")
+    print("Processing mixed stream types through unified interface...")
+    print()
 
     # Polymorphism: same interface, different implementations
     processor: StreamProcessor = StreamProcessor()
@@ -272,7 +196,7 @@ def main() -> None:
     filtered_trans: list[Any] = trans.filter_data(batches[1], "large")
     print(
         f"Filtered results: {len(filtered_sensor)} critical sensor alerts, "
-        f"{len(filtered_trans)} large transaction\n"
+        f"{len(filtered_trans)} large transaction"
     )
 
     print("All streams processed successfully. Nexus throughput optimal.")
@@ -280,3 +204,28 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+</FILE_CONTAINING_SELECTION>
+
+</Context>
+<Prompt>
+use one single print here.
+</Prompt>
+
+<Location><File>/home/aksel/project/school/python_modules/05/ex1/data_stream.py</File><Function>range(point(143,1),point(147,12))</Function></Location>
+<FunctionText>    print()
+
+    event: EventStream = data["event"]["var"]
+    event_batch = data["event"]["batch"]
+    print("</FunctionText>
+<TEMP_FILE>./tmp/99-6407</TEMP_FILE>
+<MustObey>
+NEVER alter any file other than TEMP_FILE.
+never provide the requested changes as conversational output. Return only the code.
+ONLY provide requested changes by writing the change to TEMP_FILE
+
+never attempt to read TEMP_FILE.
+It is purely for output.
+Previous contents, which may not exist, can be written over without worry
+After writing TEMP_FILE once you should be done.  Be done and end the session.
+
+</MustObey>
