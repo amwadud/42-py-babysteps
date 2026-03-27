@@ -216,32 +216,32 @@ def main() -> None:
     sensor: SensorStream = data["sensor"]["var"]
     sensor_batch = data["sensor"]["batch"]
     print(
-        f"Initializing Sensor Stream... \n"
-        f"Stream ID: {sensor.stream_id}, Type: {data['sensor']['type']},\n"
-        f"Processing sensor batch: {sensor_batch}, \n"
+        "Initializing Sensor Stream... \n" +
+        f"Stream ID: {sensor.stream_id}, Type: {data['sensor']['type']},\n" +
+        f"Processing sensor batch: {sensor_batch}, \n" +
         f"{sensor.process_batch(sensor_batch)}\n"
     )
 
     trans: TransactionStream = data["trans"]["var"]
     trans_batch = data["trans"]["batch"]
     print(
-        f"Initializing Transaction Stream... \n"
-        f"Stream ID: {trans.stream_id}, Type: {data['trans']['type']}\n"
-        f"Processing transaction batch: {trans_batch}\n"
+        "Initializing Transaction Stream... \n" +
+        f"Stream ID: {trans.stream_id}, Type: {data['trans']['type']}\n" +
+        f"Processing transaction batch: {trans_batch}\n" +
         f"{trans.process_batch(trans_batch)}\n"
     )
 
     event: EventStream = data["event"]["var"]
     event_batch = data["event"]["batch"]
     print(
-        f"Initializing Event Stream...\n"
-        f"Stream ID: {event.stream_id}, Type: {data['event']['type']}\n"
-        f"Processing event batch: {event_batch}\n"
+        "Initializing Event Stream...\n" +
+        f"Stream ID: {event.stream_id}, Type: {data['event']['type']}\n" +
+        f"Processing event batch: {event_batch}\n" +
         f"{event.process_batch(event_batch)}\n"
     )
 
     print(
-        "=== Polymorphic Stream Processing ===\n"
+        "=== Polymorphic Stream Processing ===\n" +
         "    Processing mixed stream types through unified interface...\n"
     )
 
@@ -271,7 +271,7 @@ def main() -> None:
     )
     filtered_trans: list[Any] = trans.filter_data(batches[1], "large")
     print(
-        f"Filtered results: {len(filtered_sensor)} critical sensor alerts, "
+        f"Filtered results: {len(filtered_sensor)} critical sensor alerts, " +
         f"{len(filtered_trans)} large transaction\n"
     )
 
