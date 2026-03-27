@@ -1,6 +1,0 @@
-        except ValueError as e:
-            return f"Invalid numeric value: {e}"
-        except TypeError as e:
-            return f"Unsupported data type: {e}"
-        except OverflowError as e:
-            return f"Number too large: {e}"

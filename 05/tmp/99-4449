@@ -1,8 +1,0 @@
-    if data_type == StreamProcessor:
-        print(processed_data)
-    elif data_type == TransactionStream:
-        print(processed_data)
-    elif data_type == EventStream:
-        print(processed_data)
-    else:
-        raise TypeError("[ERROR]: Types should be of type DataStream")

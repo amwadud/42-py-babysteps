@@ -1,3 +1,14 @@
+"""
+Code Nexus - Exercise 2: Nexus Integration
+
+This exercise teaches:
+1. Method overriding - subclass provides its own impl of a parent method
+2. Subtype polymorphism - different classes can be used through same interface
+3. ABC (Abstract Base Class) - base class that defines abstract methods
+4. Protocol - duck typing interface, any class with process() works
+5. Inheritance - subclasses inherit from parent but override behavior
+"""
+
 from abc import ABC, abstractmethod
 from typing import Any, Protocol
 
@@ -6,29 +17,6 @@ class ProcessingStage(Protocol):
     """Protocol for processing stages using duck typing."""
 
     def process(self, data: Any) -> Any: ...
-
-
-class ProcessingPipeline(ABC):
-    """Abstract base class for processing pipelines."""
-
-    def __init__(self, pipeline_id: str) -> None:
-        self.pipeline_id: str = pipeline_id
-        self.stages: list[ProcessingStage] = []
-
-    @abstractmethod
-    def process(self, data: Any) -> str | Any:
-        """Process data and return result."""
-        pass
-
-    def add_stage(self, stage: ProcessingStage) -> None:
-        """Add a processing stage to the pipeline."""
-        self.stages.append(stage)
-
-    def execute(self, data: Any) -> Any:
-        result = data
-        for stage in self.stages:
-            result = stage.process(result)
-        return result
 
 
 class InputStage:
@@ -56,33 +44,68 @@ class OutputStage:
         return f"Output: {data}"
 
 
+class ProcessingPipeline(ABC):
+    """
+    Abstract base class for processing pipelines.
+
+    Key concepts:
+    - ABC: Cannot be instantiated directly, must be subclassed
+    - @abstractmethod: Subclasses MUST implement this method
+    - self.stages: List of ProcessingStage (duck typing)
+    """
+
+    def __init__(self, pipeline_id: str) -> None:
+        self.pipeline_id: str = pipeline_id
+        self.stages: list[ProcessingStage] = []
+
+    @abstractmethod
+    def process(self, data: Any) -> str | Any:
+        """Subclasses MUST implement this method."""
+        pass
+
+    def add_stage(self, stage: ProcessingStage) -> None:
+        """Add a processing stage to the pipeline."""
+        self.stages.append(stage)
+
+    def execute(self, data: Any) -> Any:
+        """Execute all stages in sequence - polymorphism in action!"""
+        result = data
+        for stage in self.stages:
+            result = stage.process(result)
+        return result
+
+
 class JSONAdapter(ProcessingPipeline):
-    """JSON data adapter inheriting from ProcessingPipeline."""
+    """JSON data adapter - inherits from ProcessingPipeline."""
 
     def __init__(self, pipeline_id: str) -> None:
         super().__init__(pipeline_id)
 
     def process(self, data: Any) -> str:
-        result = self.execute(data)
+        """
+        Override: Each adapter handles data differently while keeping
+        the same interface (process method).
+        """
+        _ = self.execute(data)
         if isinstance(data, dict):
             if "value" in data:
                 unit = data.get("unit", "Unknown")
                 value = data.get("value", 0)
-                degree_symbol = "\u00b0"
                 return (
                     f"Processed temperature reading: "
-                    f"{value}{degree_symbol}{unit} (Normal range)"
+                    f"{value}°{unit} (Normal range)"
                 )
         return "Unsupported format"
 
 
 class CSVAdapter(ProcessingPipeline):
-    """CSV data adapter inheriting from ProcessingPipeline."""
+    """CSV data adapter - inherits from ProcessingPipeline."""
 
     def __init__(self, pipeline_id: str) -> None:
         super().__init__(pipeline_id)
 
     def process(self, data: Any) -> str:
+        """Override - different behavior for CSV data."""
         _ = self.execute(data)
         if isinstance(data, str) and "," in data:
             return "User activity logged: 1 actions processed"
@@ -90,19 +113,19 @@ class CSVAdapter(ProcessingPipeline):
 
 
 class StreamAdapter(ProcessingPipeline):
-    """Stream data adapter inheriting from ProcessingPipeline."""
+    """Stream data adapter - inherits from ProcessingPipeline."""
 
     def __init__(self, pipeline_id: str) -> None:
         super().__init__(pipeline_id)
 
     def process(self, data: Any) -> str:
+        """Override - different behavior for stream data."""
         _ = self.execute(data)
         if isinstance(data, list):
             values = [x for x in data if isinstance(x, (int, float))]
             avg = sum(values) / len(values) if values else 0
-            avg_rounded = round(avg, 1)
             return (
-                f"Stream summary: {len(data)} readings, avg: {avg_rounded}°C"
+                f"Stream summary: {len(data)} readings, avg: {round(avg, 1)}°C"
             )
         return f"Data: {data}"
 
@@ -110,14 +133,16 @@ class StreamAdapter(ProcessingPipeline):
 class NexusManager:
     """Pipeline manager orchestrating multiple pipelines."""
 
-    def __init__(self) -> None:
+    def __init__(self, capacity: int = 1000) -> None:
         self.pipelines: list[ProcessingPipeline] = []
-        self.capacity: int = 1000
+        self.capacity: int = capacity
 
     def add_pipeline(self, pipeline: ProcessingPipeline) -> None:
+        """Accepts any ProcessingPipeline subclass - polymorphism."""
         self.pipelines.append(pipeline)
 
     def process_all(self, data_list: list[Any]) -> list[Any]:
+        """Process multiple pipelines with multiple data types."""
         results: list[Any] = []
         for i, pipeline in enumerate(self.pipelines):
             if i < len(data_list):
@@ -126,6 +151,7 @@ class NexusManager:
 
 
 def main() -> None:
+    """Main function demonstrating the polymorphic system."""
     print("=== CODE NEXUS - ENTERPRISE PIPELINE SYSTEM ===")
     print()
 
@@ -135,65 +161,70 @@ def main() -> None:
     print()
 
     print("Creating Data Processing Pipeline...")
-    _ = JSONAdapter("PIPELINE_A")
+    input_stage = InputStage()
+    transform_stage = TransformStage()
+    output_stage = OutputStage()
+
+    pipeline = JSONAdapter("PIPELINE_A")
+    pipeline.add_stage(input_stage)
+    pipeline.add_stage(transform_stage)
+    pipeline.add_stage(output_stage)
+    manager.add_pipeline(pipeline)
+
     print("Stage 1: Input validation and parsing")
     print("Stage 2: Data transformation and enrichment")
     print("Stage 3: Output formatting and delivery")
     print()
 
-    data: dict[str, dict[str, Any]] = {
-        "json": {
-            "adapter": JSONAdapter("JSON_001"),
-            "input": {"sensor": "temp", "value": 23.5, "unit": "C"},
-        },
-        "csv": {
-            "adapter": CSVAdapter("CSV_001"),
-            "input": "user,action,timestamp",
-        },
-        "stream": {
-            "adapter": StreamAdapter("STREAM_001"),
-            "input": [22.0, 22.5, 21.8, 22.2, 22.1],
-        },
-    }
-
+    # POLYMORPHISM DEMO: Same interface (process), different implementations
     print("=== Multi-Format Data Processing ===")
-    print("Processing JSON data through pipeline...")
-    json_adapter = data["json"]["adapter"]
-    json_input = data["json"]["input"]
-    json_str = str(json_input).replace("'", '"')
-    print(f"Input: {json_str}")
+
+    # JSON data
+    json_adapter = JSONAdapter("JSON_001")
+    json_input = {"sensor": "temp", "value": 23.5, "unit": "C"}
+    print(f"Input: {json_input}")
     print("Transform: Enriched with metadata and validation")
     print(f"Output: {json_adapter.process(json_input)}")
     print()
 
-    print("Processing CSV data through same pipeline...")
-    csv_adapter = data["csv"]["adapter"]
-    csv_input = data["csv"]["input"]
+    # CSV data - same interface!
+    csv_adapter = CSVAdapter("CSV_001")
+    csv_input = "user,action,timestamp"
     print(f'Input: "{csv_input}"')
     print("Transform: Parsed and structured data")
     print(f"Output: {csv_adapter.process(csv_input)}")
     print()
 
-    print("Processing Stream data through same pipeline...")
-    stream_adapter = data["stream"]["adapter"]
-    stream_input = data["stream"]["input"]
+    # Stream data - same interface!
+    stream_adapter = StreamAdapter("STREAM_001")
+    stream_input = [22.0, 22.5, 21.8, 22.2, 22.1]
     print("Input: Real-time sensor stream")
     print("Transform: Aggregated and filtered")
     print(f"Output: {stream_adapter.process(stream_input)}")
     print()
 
+    # PIPELINE CHAINING: Output of one becomes input of next
     print("=== Pipeline Chaining Demo ===")
     print("Pipeline A -> Pipeline B -> Pipeline C")
     print("Data flow: Raw -> Processed -> Analyzed -> Stored")
-    print("Chain result: 100 records processed through 3-stage pipeline")
+
+    test_data = [{"test": 1}, "a,b,c", [1, 2, 3]]
+    results = manager.process_all(test_data)
+
+    print(f"Chain result: {len(results)} records processed")
     print("Performance: 95% efficiency, 0.2s total processing time")
     print()
 
+    # ERROR RECOVERY: Try/except for robustness
     print("=== Error Recovery Test ===")
     print("Simulating pipeline failure...")
-    print("Error detected in Stage 2: Invalid data format")
-    print("Recovery initiated: Switching to backup processor")
-    print("Recovery successful: Pipeline restored, processing resumed")
+
+    try:
+        raise ValueError("Invalid data format")
+    except ValueError as e:
+        print(f"Error detected in Stage 2: {e}")
+        print("Recovery initiated: Switching to backup processor")
+        print("Recovery successful: Pipeline restored, processing resumed")
     print()
 
     print("Nexus Integration complete. All systems operational.")

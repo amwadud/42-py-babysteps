@@ -1,1 +1,0 @@
-    print("Batch 1 Results:\n" + f"- Sensor data: {len(batches[0])} readings processed\n" + f"- Transaction data: {len(batches[1])} operations processed\n" + f"- Event data: {len(batches[2])} events processed\n")

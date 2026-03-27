@@ -18,7 +18,7 @@ class DataProcessor(ABC):
 
 
 class NumericProcessor(DataProcessor):
-    def process(self, data: list | tuple | int | float) -> str:
+    def process(self, data: list[Any] | tuple[Any] | int | float) -> str:
         try:
             if isinstance(data, (list, tuple)):
                 numbers = [
@@ -39,7 +39,7 @@ class NumericProcessor(DataProcessor):
         except OverflowError as e:
             return self.format_output(f"Number too large: {e}")
 
-    def validate(self, data: list | tuple | int | float) -> bool:
+    def validate(self, data: list[Any] | tuple[Any] | int | float) -> bool:
         if isinstance(data, (list, tuple)):
             for x in data:
                 if not isinstance(x, (int, float)):

@@ -1,5 +1,0 @@
-    def execute(self, data: Any) -> Any:
-        result = data
-        for stage in self.stages:
-            result = stage.process(result)
-        return result

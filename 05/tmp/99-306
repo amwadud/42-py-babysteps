@@ -1,1 +1,0 @@
-    print(f"Stream ID: {data["sensor"]["var"].stream_id}, Type: {data["sensor"]["type"]}")
